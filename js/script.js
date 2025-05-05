@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Typing Effect
-    const phrases = ['Developer', 'Problem Solver', 'Tech Enthusiast'];
+    const phrases = ['Computational Scientist', 'Developer', 'Problem Solver', 'Tech Enthusiast'];
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
