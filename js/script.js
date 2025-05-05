@@ -216,5 +216,9 @@ function displayProjects(repos) {
         `;
         projectList.appendChild(projectCard);
     });
+    // Add dynamic meta description for projects
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const projectNames = repos.map(repo => repo.name).join(', ');
+    metaDescription.content = `Portfolio of Dr. Mazharuddin Mohammed, featuring projects like ${projectNames}. Specializing in Quantum Technolgies, Full Stack, C++/Python, JavaScript web and app development.`;
 }
 
