@@ -201,3 +201,20 @@ contactForm.addEventListener('submit', async (e) => {
         }
     }
 });
+
+function displayProjects(repos) {
+    projectList.innerHTML = '';
+    repos.forEach(repo => {
+        const projectCard = document.createElement('div');
+        projectCard.className = 'project-card bg-white p-6 rounded-lg shadow-md';
+        projectCard.dataset.language = repo.language || 'Unknown';
+        projectCard.innerHTML = `
+            <h3 class="text-xl font-semibold mb-2">${repo.name}</h3>
+            <p class="text-gray-600 mb-2">${repo.description || 'No description available.'}</p>
+            <p class="text-sm text-gray-500 mb-4">Language: ${repo.language || 'N/A'}</p>
+            <a href="${repo.html_url}" target="_blank" class="text-blue-500 hover:underline" onclick="gtag('event', 'click_project', { 'project_name': '${repo.name}', 'language': '${repo.language || 'N/A'}' });">View on GitHub</a>
+        `;
+        projectList.appendChild(projectCard);
+    });
+}
+

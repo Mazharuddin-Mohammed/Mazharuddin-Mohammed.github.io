@@ -8,6 +8,22 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="assets/favicon.ico">
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-E2MNDLLXYF');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
+    <script>
+        window.cookieconsent.initialise({
+            palette: { popup: { background: "#000" }, button: { background: "#f1d600" } },
+            content: { message: "This site uses cookies for analytics.", dismiss: "Got it!", link: "Learn more", href: "/privacy" }
+        });
+    </script>
 </head>
 <body class="bg-gray-100 font-sans">
     <!-- Navbar -->
