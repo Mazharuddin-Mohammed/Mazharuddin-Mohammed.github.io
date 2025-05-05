@@ -78,3 +78,8 @@ h1 {
         margin-bottom: 1rem;
     }
 }
+
+/* Form error message */
+#form-error {
+    transition: opacity 0.3s ease;
+}

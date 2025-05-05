@@ -139,3 +139,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Contact Form Validation and Submission
+const contactForm = document.getElementById('contact-form');
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const messageInput = document.getElementById('message');
+const nameError = document.getElementById('name-error');
+const emailError = document.getElementById('email-error');
+const messageError = document.getElementById('message-error');
+const formSuccess = document.getElementById('form-success');
+const formError = document.getElementById('form-error');
+
+contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let isValid = true;
+
+    // Reset errors and messages
+    nameError.classList.add('hidden');
+    emailError.classList.add('hidden');
+    messageError.classList.add('hidden');
+    formSuccess.classList.add('hidden');
+    formError.classList.add('hidden');
+
+    // Validate inputs
+    if (!nameInput.value.trim()) {
+        nameError.classList.remove('hidden');
+        isValid = false;
+    }
+    if (!emailInput.value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        emailError.classList.remove('hidden');
+        isValid = false;
+    }
+    if (!messageInput.value.trim()) {
+        messageError.classList.remove('hidden');
+        isValid = false;
+    }
+
+    if (isValid) {
+        try {
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: new FormData(contactForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                formSuccess.classList.remove('hidden');
+                contactForm.reset();
+                setTimeout(() => formSuccess.classList.add('hidden'), 3000);
+            } else {
+                formError.classList.remove('hidden');
+                setTimeout(() => formError.classList.add('hidden'), 3000);
+            }
+        } catch (error) {
+            formError.classList.remove('hidden');
+            setTimeout(() => formError.classList.add('hidden'), 3000);
+            console.error('Form submission error:', error);
+        }
+    }
+});
