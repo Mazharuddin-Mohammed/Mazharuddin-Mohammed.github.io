@@ -83,3 +83,12 @@ h1 {
 #form-error {
     transition: opacity 0.3s ease;
 }
+
+/* Social badge hover effect */
+.social-badge svg {
+    transition: transform 0.3s ease, fill 0.3s ease;
+}
+
+.social-badge:hover svg {
+    transform: scale(1.1);
+}
