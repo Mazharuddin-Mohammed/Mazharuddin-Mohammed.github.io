@@ -85,10 +85,11 @@ h1 {
 }
 
 /* Social badge hover effect */
-.social-badge svg {
-    transition: transform 0.3s ease, fill 0.3s ease;
+.social-badge i {
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.social-badge:hover svg {
+.social-badge:hover i {
     transform: scale(1.1);
+    color: #60a5fa; /* Tailwind's blue-400 */
 }
