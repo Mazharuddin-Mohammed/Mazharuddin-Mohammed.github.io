@@ -62,9 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
     projectList = document.getElementById('project-list');
     let allRepos = [];
 
+    console.log('Fetching repos for username:', config.username);
     fetch(`https://api.github.com/users/${config.username}/repos`)
-        .then(response => response.json())
+        .then(response => {
+            console.log('API response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`GitHub API responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(repos => {
+            console.log('Repos fetched successfully:', repos.length);
             allRepos = repos;
             displayProjects(allRepos);
 
@@ -85,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         })
         .catch(error => {
+            console.error('Detailed error fetching repos:', error);
             projectList.innerHTML = '<p class="text-red-500">Failed to load projects.</p>';
             console.error('Error fetching repos:', error);
         });
@@ -162,6 +171,14 @@ contactForm.addEventListener('submit', async (e) => {
 });
 
 function displayProjects(repos) {
+    console.log('displayProjects called with', repos.length, 'repos');
+    console.log('projectList element:', projectList);
+
+    if (!projectList) {
+        console.error('projectList is undefined or null!');
+        return;
+    }
+
     projectList.innerHTML = '';
     repos.forEach(repo => {
         const projectCard = document.createElement('div');
@@ -176,9 +193,13 @@ function displayProjects(repos) {
         projectList.appendChild(projectCard);
     });
 
-    // Add dynamic meta description for projects
-    const metaDescription = document.querySelector('meta[name="description"]');
-    const projectNames = repos.slice(0, 5).map(repo => repo.name).join(', '); // Limit to first 5 projects for meta description
-    metaDescription.content = `Portfolio of Dr. Mazharuddin Mohammed, featuring projects like ${projectNames}. Specializing in Quantum Technologies, Full Stack, C++/Python, JavaScript web and app development.`;
+    try {
+        // Add dynamic meta description for projects
+        const metaDescription = document.querySelector('meta[name="description"]');
+        const projectNames = repos.slice(0, 5).map(repo => repo.name).join(', '); // Limit to first 5 projects for meta description
+        metaDescription.content = `Portfolio of Dr. Mazharuddin Mohammed, featuring projects like ${projectNames}. Specializing in Quantum Technologies, Full Stack, C++/Python, JavaScript web and app development.`;
+    } catch (error) {
+        console.error('Error updating meta description:', error);
+    }
 }
 
