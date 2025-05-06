@@ -13,6 +13,9 @@ const config = {
     }
 };
 
+// Global variables
+let projectList;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
@@ -56,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     type();
 
     // Project Filter
-    const projectList = document.getElementById('project-list');
+    projectList = document.getElementById('project-list');
     let allRepos = [];
 
     fetch(`https://api.github.com/users/${config.username}/repos`)
