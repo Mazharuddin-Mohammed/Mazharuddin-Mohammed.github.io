@@ -1,21 +1,3 @@
-// Configuration
-const config = {
-    username: 'Mazharuddin-Mohammed',
-    typingPhrases: ['Computational Scientist', 'Developer', 'Problem Solver', 'Tech Enthusiast'],
-    typingSpeed: {
-        type: 100,
-        delete: 50,
-        pauseBetweenPhrases: 1000
-    },
-    formSubmission: {
-        successMessageDuration: 3000,
-        errorMessageDuration: 3000
-    }
-};
-
-// Global variables
-let projectList;
-
 document.addEventListener('DOMContentLoaded', () => {
     // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
@@ -32,47 +14,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Typing Effect
+    const phrases = ['Computational Scientist', 'Developer', 'Problem Solver', 'Tech Enthusiast'];
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
     const typingText = document.getElementById('typing-text');
 
     function type() {
-        const currentPhrase = config.typingPhrases[phraseIndex];
+        const currentPhrase = phrases[phraseIndex];
         typingText.textContent = currentPhrase.substring(0, charIndex);
 
         if (!isDeleting && charIndex < currentPhrase.length) {
             charIndex++;
-            setTimeout(type, config.typingSpeed.type);
+            setTimeout(type, 100);
         } else if (isDeleting && charIndex > 0) {
             charIndex--;
-            setTimeout(type, config.typingSpeed.delete);
+            setTimeout(type, 50);
         } else {
             isDeleting = !isDeleting;
             if (!isDeleting) {
-                phraseIndex = (phraseIndex + 1) % config.typingPhrases.length;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
             }
-            setTimeout(type, isDeleting ? config.typingSpeed.delete : config.typingSpeed.pauseBetweenPhrases);
+            setTimeout(type, isDeleting ? 50 : 1000);
         }
     }
 
     type();
 
     // Project Filter
-    projectList = document.getElementById('project-list');
+    const projectList = document.getElementById('project-list');
+    const username = 'Mazharuddin-Mohammed';
     let allRepos = [];
 
-    console.log('Fetching repos for username:', config.username);
-    fetch(`https://api.github.com/users/${config.username}/repos`)
-        .then(response => {
-            console.log('API response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`GitHub API responded with status: ${response.status}`);
-            }
-            return response.json();
-        })
+    function displayProjects(repos) {
+        projectList.innerHTML = '';
+        repos.forEach(repo => {
+            const projectCard = document.createElement('div');
+            projectCard.className = 'project-card bg-white p-6 rounded-lg shadow-md';
+            projectCard.dataset.language = repo.language || 'Unknown';
+            projectCard.innerHTML = `
+                <h3 class="text-xl font-semibold mb-2">${repo.name}</h3>
+                <p class="text-gray-600 mb-2">${repo.description || 'No description available.'}</p>
+                <p class="text-sm text-gray-500 mb-4">Language: ${repo.language || 'N/A'}</p>
+                <a href="${repo.html_url}" target="_blank" class="text-blue-500 hover:underline">View on GitHub</a>
+            `;
+            projectList.appendChild(projectCard);
+        });
+    }
+
+    fetch(`https://api.github.com/users/${username}/repos`)
+        .then(response => response.json())
         .then(repos => {
-            console.log('Repos fetched successfully:', repos.length);
             allRepos = repos;
             displayProjects(allRepos);
 
@@ -93,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         })
         .catch(error => {
-            console.error('Detailed error fetching repos:', error);
             projectList.innerHTML = '<p class="text-red-500">Failed to load projects.</p>';
             console.error('Error fetching repos:', error);
         });
@@ -170,36 +161,5 @@ contactForm.addEventListener('submit', async (e) => {
     }
 });
 
-function displayProjects(repos) {
-    console.log('displayProjects called with', repos.length, 'repos');
-    console.log('projectList element:', projectList);
-
-    if (!projectList) {
-        console.error('projectList is undefined or null!');
-        return;
-    }
-
-    projectList.innerHTML = '';
-    repos.forEach(repo => {
-        const projectCard = document.createElement('div');
-        projectCard.className = 'project-card bg-white p-6 rounded-lg shadow-md';
-        projectCard.dataset.language = repo.language || 'Unknown';
-        projectCard.innerHTML = `
-            <h3 class="text-xl font-semibold mb-2">${repo.name}</h3>
-            <p class="text-gray-600 mb-2">${repo.description || 'No description available.'}</p>
-            <p class="text-sm text-gray-500 mb-4">Language: ${repo.language || 'N/A'}</p>
-            <a href="${repo.html_url}" target="_blank" class="text-blue-500 hover:underline" onclick="gtag('event', 'click_project', { 'project_name': '${repo.name}', 'language': '${repo.language || 'N/A'}' });">View on GitHub</a>
-        `;
-        projectList.appendChild(projectCard);
-    });
-
-    try {
-        // Add dynamic meta description for projects
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const projectNames = repos.slice(0, 5).map(repo => repo.name).join(', '); // Limit to first 5 projects for meta description
-        metaDescription.content = `Portfolio of Dr. Mazharuddin Mohammed, featuring projects like ${projectNames}. Specializing in Quantum Technologies, Full Stack, C++/Python, JavaScript web and app development.`;
-    } catch (error) {
-        console.error('Error updating meta description:', error);
-    }
-}
+// This function is now defined inside the DOMContentLoaded event listener
 
